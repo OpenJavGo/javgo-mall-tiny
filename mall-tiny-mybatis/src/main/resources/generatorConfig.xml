@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- 导入属性配置 -->
+    <properties resource="generator.properties"/>
+
+    <!-- MBG 上下文环境
+        id：上下文环境唯一标识，必须唯一
+        targetRuntime：生成的目标运行环境
+            MyBatis3：代表生成MyBatis3.x版本的代码
+            MyBatis3Simple：新版本的生成器
+            MyBatis3DynamicSql：新版本的生成器
+        defaultModelType：生成的默认Model类型
+            flat：代表生成的Model都是一个个的独立的类，例如生成Dept类（推荐）
+            hierarchical：代表生成的Model类会按照层级进行组织，例如生成Dept、DeptMapper、DeptExample三个类
+     -->
+    <context id="MySqlContext" targetRuntime="MyBatis3" defaultModelType="flat">
+        <!-- 配置SQL语句中的前置分隔符 -->
+        <property name="beginningDelimiter" value="`"/>
+        <!-- 配置SQL语句中的后置分隔符 -->
+        <property name="endingDelimiter" value="`"/>
+        <!-- 配置生成Java文件的编码 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!--生成mapper.xml时覆盖原文件-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <!-- 为模型生成序列化方法-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!-- 为生成的Java模型创建一个toString方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!--可以自定义生成model的代码注释
+            type：自定义注释生成器的类全限定名
+        -->
+        <commentGenerator type="cn.javgo.mall.tiny.mybatis.mapper.mbg.common.CommentGenerator">
+            <!-- 是否阻止生成的注释 -->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 是否阻止生成的注释包含时间戳 -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否添加数据库表的备注信息 -->
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+        <!-- 配置数据库连接 -->
+        <jdbcConnection driverClass="${jdbc.driverClass}"
+                        connectionURL="${jdbc.connectionURL}"
+                        userId="${jdbc.username}"
+                        password="${jdbc.password}">
+            <!-- 配置数据库连接的属性信息
+                autoReconnect：是否自动重连
+                allowMultiQueries：是否允许执行多条SQL语句
+                useUnicode：是否使用Unicode字符集
+                characterEncoding：设置字符集编码
+                useSSL：是否使用SSL
+                nullCatalogMeansCurrent：是否将null catalog看作当前catalog（解决 MySql 8.0 以上版本不生成指定数据库代码的问题）
+             -->
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+        <!-- 配置实体类的包名和位置
+            targetPackage：生成的实体类存放的包名
+            targetProject：生成的实体类存放的位置
+        -->
+        <javaModelGenerator targetPackage="cn.javgo.mall.tiny.mybatis.model.mbg" targetProject="mall-tiny-mybatis/src/main/java">
+            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="true"/>
+            <!-- 是否对model添加构造函数 -->
+            <property name="constructorBased" value="true"/>
+            <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- 配置SQL映射文件的包名和位置
+            targetPackage：生成的SQL映射文件存放的包名
+            targetProject：生成的SQL映射文件存放的位置
+         -->
+        <sqlMapGenerator targetPackage="cn.javgo.mall.tiny.mybatis.mapper.mbg" targetProject="mall-tiny-mybatis/src/main/resources">
+            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!-- 配置Mapper接口的包名和位置
+            type：选择怎么生成mapper接口（推荐使用XMLMAPPER）
+                XMLMAPPER：生成XML对应的Mapper接口
+                ANNOTATEDMAPPER：生成基于注解的Mapper接口
+                MIXEDMAPPER：生成XML对应的Mapper接口，同时也生成基于注解的Mapper接口
+            targetPackage：生成的Mapper接口存放的包名
+            targetProject：生成的Mapper接口存放的位置
+         -->
+        <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="cn.javgo.mall.tiny.mybatis.mapper.mbg"
+                             targetProject="mall-tiny-mybatis/src/main/java">
+            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <!-- 指定数据库表
+            tableName：数据库表名(生成全部表 tableName 设为 % )
+            domainObjectName：生成的实体类名（默认去掉下划线，驼峰命名）
+         -->
+        <table tableName="pms_brand">
+            <!-- 配置自增主键
+                column：指定获取自增主键的列
+                sqlStatement：指定获取自增主键的SQL语句
+                identity：指定是否为自增主键
+             -->
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>
